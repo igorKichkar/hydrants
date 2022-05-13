@@ -8,5 +8,5 @@ class HydrantViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows hydrants to be viewed or edited.
     """
-    queryset = Hydrant.objects.all().order_by('-date')
+    queryset = Hydrant.objects.all()
     serializer_class = HydrantSerializer
