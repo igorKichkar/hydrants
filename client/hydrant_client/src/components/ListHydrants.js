@@ -8,12 +8,21 @@ const ListHydrants = () => {
     const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
 
-    const sortedHydrants = useMemo(() => {
-        return listHydrants.filter(hydrant => {
-            const fields = String(hydrant.number).toLowerCase() + ' ' + hydrant.address.toLowerCase()
-            return fields
-                .includes(searchQuery.toLowerCase())
+    const filterHydrants = useMemo(() => {
+        // return listHydrants.filter(hydrant => {
+        //     const fields = String(hydrant.serial_number).toLowerCase() + ' ' +
+        //         hydrant.address_detail.toLowerCase() + ' '
+        //
+        //     return fields
+        //         .includes(searchQuery.toLowerCase())
+        //
+        // })
+        const result = listHydrants.filter(hydrant => {
+            return String(hydrant.type).toLowerCase().includes(searchQuery.toLowerCase())
+
         })
+        return result
+
     }, [listHydrants, searchQuery])
 
     useEffect(() => {
@@ -38,17 +47,37 @@ const ListHydrants = () => {
                 <table className="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Номер</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Название</th>
                         <th scope="col">Адресс</th>
-                        <th scope="col">Тип водоснабжения</th>
+                        <th scope="col">Принадлежность</th>
+                        <th scope="col">Характеристики</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    {sortedHydrants.map((hydrant) => <tr key={hydrant.id}>
-                        <th>{hydrant.number}</th>
-                        <td>{hydrant.address}</td>
-                        <td>{hydrant.type_of_water_supply}</td>
+                    {filterHydrants.map((hydrant) => <tr key={hydrant.id}>
+                        <th>{hydrant.id}</th>
+                        <td>{hydrant.type}</td>
+                        <td>
+                            <p>{hydrant.coordinate_width} {hydrant.coordinate_height}</p>
+                            <p>
+                                {hydrant.address_region}{' '}
+                                {hydrant.address_district}{' '}
+                                {hydrant.address_district}{' '}
+                                {hydrant.address_village_council}{' '}
+                                {hydrant.address_town}{' '}
+                                {hydrant.address_detail}
+                            </p>
+                        </td>
+                        <td>{hydrant.belonging}</td>
+                        <td>
+                            <p>Испраность: {hydrant.serviceable ? 'Да' : 'Нет'}</p>
+                            <p>Номер: {hydrant.serial_number}</p>
+                            <p>Тип сети: {hydrant.type_of_water_supply}</p>
+                            <p>Диаметр: {hydrant.diameter_drain}</p>
+                            {hydrant.description && <p>Описание: {hydrant.note}</p>}
+                        </td>
                         <td>Редактировать</td>
                     </tr>)}
                     </tbody>
@@ -60,14 +89,3 @@ const ListHydrants = () => {
 };
 
 export default ListHydrants;
-
-
-// listHydrants.map((hydrant) => <tr key={hydrant.id}>
-//                 <th>{hydrant.number}</th>
-//                 <td>{hydrant.address}</td>
-//                 <li>{hydrant.type_of_water_supply}</li>
-//                 <li>{hydrant.serviceable}</li>
-//                 <li>{hydrant.fault_type}</li>
-//                 <li>{hydrant.coordinates_width}</li>
-//                 <li>{hydrant.coordinates_height}</li>
-//             </tr>)
