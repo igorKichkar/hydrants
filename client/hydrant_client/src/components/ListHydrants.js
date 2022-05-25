@@ -2,28 +2,60 @@ import React from 'react';
 import {useState, useEffect, useMemo} from "react";
 import axios from "axios";
 import sleep from "../utils/sleep";
+import Pagination from './UI/Pagination';
+import MySelect from "./UI/MySelect";
 
 const ListHydrants = () => {
     const [listHydrants, setListHydrants] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
+    const [paginationPage, setPaginationPage] = useState(0)
+    const [selectPagination, setSelectPagination] = useState(10)
 
     const filterHydrants = useMemo(() => {
-        // return listHydrants.filter(hydrant => {
-        //     const fields = String(hydrant.serial_number).toLowerCase() + ' ' +
-        //         hydrant.address_detail.toLowerCase() + ' '
-        //
-        //     return fields
-        //         .includes(searchQuery.toLowerCase())
-        //
-        // })
         const result = listHydrants.filter(hydrant => {
-            return String(hydrant.type).toLowerCase().includes(searchQuery.toLowerCase())
-
+            const all_field = String(hydrant.type) +
+                hydrant.address_region +
+                hydrant.address_district +
+                hydrant.address_village_council +
+                hydrant.address_town +
+                hydrant.address_detail +
+                hydrant.belonging +
+                hydrant.serial_number
+            // если поисковой запрос не пустой, то запрос разбивается на массив отдельных слов
+            // и производится поиск каждого стова отдельно во всех нужных полях, 
+            // поля объеденены в переменной all_field
+            if (searchQuery) {
+                const searchWords = searchQuery.split(' ')
+                for (let i = 0; i < searchWords.length; i++) {
+                    if (searchWords[i] && !all_field.toLowerCase().includes(searchWords[i].toLowerCase())) {
+                        return false
+                    }
+                }
+            }
+            return true
         })
+        // при вводе в поле поиска сбрасывается пагинация на первую страницу
+        setPaginationPage(0)
         return result
 
     }, [listHydrants, searchQuery])
+
+    function pagination(page) {
+        // данная функция отбирает порцию записей для конкретной страницы пагинации
+        let paginationList = []
+        if (page === 0) {
+            for (let i = page; i < page + selectPagination && i < filterHydrants.length; i++) {
+                paginationList.push(filterHydrants[i])
+            }
+        } else {
+            for (let i = page * selectPagination; i < page * selectPagination + selectPagination && i < filterHydrants.length; i++) {
+                paginationList.push(filterHydrants[i])
+            }
+        }
+        return paginationList
+    }
+
 
     useEffect(() => {
         (async () => {
@@ -44,6 +76,17 @@ const ListHydrants = () => {
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                 />
+                <Pagination paginationPage={paginationPage} pages={Math.ceil(filterHydrants.length / selectPagination)}
+                            changePage={setPaginationPage}/>
+                <MySelect selectPagination={selectPagination}
+                          setSelectPagination={setSelectPagination}
+                          setPaginationPage={setPaginationPage}
+                          options={[{value: 10, name: '10'},
+                              {value: 25, name: '25'},
+                              {value: 2, name: '2'},
+                          ]}
+                          value={selectPagination}
+                />
                 <table className="table table-striped">
                     <thead>
                     <tr>
@@ -56,14 +99,13 @@ const ListHydrants = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {filterHydrants.map((hydrant) => <tr key={hydrant.id}>
+                    {pagination(paginationPage).map((hydrant) => <tr key={hydrant.id}>
                         <th>{hydrant.id}</th>
                         <td>{hydrant.type}</td>
                         <td>
                             <p>{hydrant.coordinate_width} {hydrant.coordinate_height}</p>
                             <p>
                                 {hydrant.address_region}{' '}
-                                {hydrant.address_district}{' '}
                                 {hydrant.address_district}{' '}
                                 {hydrant.address_village_council}{' '}
                                 {hydrant.address_town}{' '}
@@ -83,9 +125,8 @@ const ListHydrants = () => {
                     </tbody>
                 </table>
             </>}
-
     </div>
-
 };
 
 export default ListHydrants;
+

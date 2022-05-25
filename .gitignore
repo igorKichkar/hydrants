@@ -3,6 +3,9 @@ client/hydrant_client/.idea
 
 server/.idea
 server/.venv
+server/hydrant_server/.idea/
+server/hydrant_server/.venv/
+
 server/hydrant_server/hydrant_server/__pycache__
 server/hydrant_server/main_app/__pycache__
 server/hydrant_server/main_app/migrations/__pycache__
