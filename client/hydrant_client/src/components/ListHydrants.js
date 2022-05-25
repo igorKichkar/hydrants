@@ -81,7 +81,8 @@ const ListHydrants = () => {
                 <MySelect selectPagination={selectPagination}
                           setSelectPagination={setSelectPagination}
                           setPaginationPage={setPaginationPage}
-                          options={[{value: 10, name: '10'},
+                          options={[
+                              {value: 10, name: '10'},
                               {value: 25, name: '25'},
                               {value: 2, name: '2'},
                           ]}
