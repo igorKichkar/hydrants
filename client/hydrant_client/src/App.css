@@ -1,18 +1,28 @@
-body{
-    font-family: "Raleway";
+body {
+  font-family: "Raleway";
 }
 
 .authForm {
-    width: 50%;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+  width: 50%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.mainPage{
-    margin-top: 100px;
+.mainPage {
+  margin-top: 100px;
 }
 
-.button{
-    width: 80px;
+.button {
+  width: 80px;
 }
+
+.sort {
+  display: inline-flex;
+}
+
+.sortCursor:hover {
+  background: rgba(0, 183, 255, 0.322);
+  cursor: pointer;
+}
+
