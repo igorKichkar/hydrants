@@ -25,4 +25,22 @@ body {
   background: rgba(0, 183, 255, 0.322);
   cursor: pointer;
 }
+.idField {
+  width: 5%;
+}
 
+.typeField {
+  width: 15%;
+}
+
+.addressField {
+  width: 50%;
+}
+
+.belongingField {
+  width: 15%;
+}
+
+.characteristicsField {
+  width: 15%;
+}

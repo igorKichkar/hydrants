@@ -1,8 +1,8 @@
 import React from 'react';
 
-const MySelect = ({selectPagination, setSelectPagination, setPaginationPage, options, defaultValue}) => {
+const MySelect = ({setSelectPagination, setPaginationPage, options}) => {
     function changePaginationAmount(value) {
-        setSelectPagination(value)
+        setSelectPagination(+value)
         setPaginationPage(0)
     }
 

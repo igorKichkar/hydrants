@@ -1,5 +1,6 @@
 client/hydrant_client/node_modules
 client/hydrant_client/.idea
+client/.idea/
 
 server/.idea
 server/.venv

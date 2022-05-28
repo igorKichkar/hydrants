@@ -1,5 +1,3 @@
-import {useState} from "react";
-
 const Pagination = ({paginationPage, changePage, pages}) => {
     let list_pages = []
     for (let i = 0; i < pages; i++) {
