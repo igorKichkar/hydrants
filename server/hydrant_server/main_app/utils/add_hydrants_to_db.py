@@ -2,42 +2,41 @@ import openpyxl
 from ..models import Hydrant, Profile
 
 
-
 def parser_address(address):
     array_address = address.split(' ')
     if array_address[0] == 'г.':
-        return {'region': 'г. Минск',
-                'district': f'{array_address[2]} район',
+        return {'region': 'Минск',
+                'district': array_address[2],
                 'village_council': '',
-                'town': 'г. Минск'}
+                'town': 'Минск'}
     elif array_address[5] == 'г.':
-        return {'region': f'{array_address[0]} область',
-                'district': f'{array_address[2]} район',
+        return {'region': array_address[0],
+                'district': array_address[2],
                 'village_council': '',
-                'town': f'г. {array_address[-1]}'}
+                'town': array_address[-1]}
     elif array_address[5] == 'аг.':
-        return {'region': f'{array_address[0]} область',
-                'district': f'{array_address[2]} район',
+        return {'region': array_address[0],
+                'district': array_address[2],
                 'village_council': '',
-                'town': f'г. {array_address[-1]}'}
+                'town': array_address[-1]}
     elif array_address[5] == 'с/с':
-        return {'region': f'{array_address[0]} область',
-                'district': f'{array_address[2]} район',
-                'village_council': f'{array_address[4]} с/с',
+        return {'region': array_address[0],
+                'district': array_address[2],
+                'village_council': array_address[4],
                 'town': f'{array_address[-2]} {array_address[-1]}'}
     elif array_address[5] == 'поселковый':
-        return {'region': f'{array_address[0]} область',
-                'district': f'{array_address[2]} район',
+        return {'region': array_address[0],
+                'district': array_address[2],
                 'village_council': f'{array_address[4]} поселковый Совет',
                 'town': f'{array_address[-2]} {array_address[-1]}'}
     elif array_address[-2] == 'гп':
-        return {'region': f'{array_address[0]} область',
-                'district': f'{array_address[2]} район',
+        return {'region': array_address[0],
+                'district': array_address[2],
                 'village_council': '',
                 'town': f'{array_address[-2]} {array_address[-1]}'}
     elif array_address[5] == 'поссовет':
-        return {'region': f'{array_address[0]} область',
-                'district': f'{array_address[2]} район',
+        return {'region': array_address[0],
+                'district': array_address[2],
                 'village_council': f'{array_address[4]} поссовет с/с',
                 'town': f'{array_address[-2]} {array_address[-1]}'}
     else:
@@ -57,7 +56,7 @@ def parser_coordinates(coordinates):
 
 def add_hydrants_to_db():
     wrkbk = openpyxl.load_workbook(
-        '/home/fireman/work/base_of_hydrants/server/hydrant_server/main_app/utils/hydrants2.xlsx')
+        '/home/fireman/Programming/hydrants/server/hydrant_server/main_app/utils/hydrants2.xlsx')
 
     sh = wrkbk.active
     result = []
@@ -124,5 +123,3 @@ def add_hydrants_to_db():
         print('not successful')
         print(not_successful)
         print(len(not_successful))
-
-

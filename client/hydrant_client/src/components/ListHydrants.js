@@ -6,6 +6,7 @@ import Pagination from "./UI/Pagination";
 import MySelect from "./UI/MySelect";
 import {sortHydrants} from "../utils/sortHydrants";
 import SortButton from "./UI/SortButton";
+import MyInput from "./UI/MyInput";
 
 const ListHydrants = () => {
     const [listHydrants, setListHydrants] = useState([]);
@@ -19,6 +20,12 @@ const ListHydrants = () => {
         address: "none",
         belonging: "none",
         characteristics: "none",
+    });
+    const [loadingAfterFilter, setLoadingAfterFilter] = useState({
+        region: "",
+        area: "",
+        locality: "",
+        street: ""
     });
 
     const filterHydrants = useMemo(() => {
@@ -97,6 +104,8 @@ const ListHydrants = () => {
                 <p>Loading...</p>
             ) : (
                 <>
+                    <MyInput loadingAfterFilter={loadingAfterFilter} setLoadingAfterFilter={setLoadingAfterFilter}
+                             listHydrants={listHydrants} setListHydrants={setListHydrants} setLoading={setLoading}/>
                     <input
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -115,6 +124,7 @@ const ListHydrants = () => {
                             {value: 2, name: "2"},
                         ]}
                     />
+
                     <table className="table table-striped">
                         <thead>
                         <tr>
@@ -211,7 +221,7 @@ const ListHydrants = () => {
                                 <td>{hydrant.type}</td>
                                 <td>
                                     <p>
-                                        {hydrant.coordinate_width} {hydrant.coordinate_height}
+                                        Ширина {hydrant.coordinate_width} Долгота {hydrant.coordinate_height}
                                     </p>
                                     <p>
                                         {hydrant.address_region} {hydrant.address_district}{" "}
