@@ -22,10 +22,11 @@ const ListHydrants = () => {
         characteristics: "none",
     });
     const [loadingAfterFilter, setLoadingAfterFilter] = useState({
-        region: "",
         area: "",
         locality: "",
-        street: ""
+        street: "",
+        belonging:"",
+        serviceable:""
     });
 
     const filterHydrants = useMemo(() => {
@@ -38,7 +39,7 @@ const ListHydrants = () => {
                 hydrant.address_town +
                 hydrant.address_detail +
                 hydrant.belonging +
-                hydrant.serial_number;
+                hydrant.number_in_map;
             // если поисковой запрос не пустой, то запрос разбивается на массив отдельных слов
             // и производится поиск каждого стова отдельно во всех нужных полях,
             // поля объеденены в переменной all_field
@@ -203,7 +204,7 @@ const ListHydrants = () => {
                                         setSortType,
                                         sortType,
                                         'characteristics',
-                                        'serial_number'
+                                        'number_in_map'
                                     );
                                 }}
                                 scope="col"
@@ -232,7 +233,7 @@ const ListHydrants = () => {
                                 <td>{hydrant.belonging}</td>
                                 <td>
                                     <p>Испраность: {hydrant.serviceable ? "Да" : "Нет"}</p>
-                                    <p>Номер: {hydrant.serial_number}</p>
+                                    <p>Номер: {hydrant.number_in_map}</p>
                                     <p>Тип сети: {hydrant.type_of_water_supply}</p>
                                     <p>Диаметр: {hydrant.diameter_drain}</p>
                                     {hydrant.description && <p>Описание: {hydrant.note}</p>}

@@ -65,7 +65,7 @@ function sortHydrants(listHydrants, setListHydrants, setSortType, sortType, fiel
             id: "none",
             characteristics: "none",
         });
-    } else if (fieldKey === 'serial_number') {
+    } else if (fieldKey === 'number_in_map') {
         setSortType({
             belonging: "none",
             address: "none",

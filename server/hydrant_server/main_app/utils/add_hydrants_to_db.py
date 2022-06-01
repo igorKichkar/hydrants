@@ -56,7 +56,7 @@ def parser_coordinates(coordinates):
 
 def add_hydrants_to_db():
     wrkbk = openpyxl.load_workbook(
-        '/home/fireman/Programming/hydrants/server/hydrant_server/main_app/utils/hydrants2.xlsx')
+        '/home/fireman/Programming/hydrants/server/hydrant_server/main_app/utils/hydrant3.xlsx')
 
     sh = wrkbk.active
     result = []
