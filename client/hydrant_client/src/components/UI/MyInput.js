@@ -49,33 +49,17 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setLi
         })();
     }
 
-    function selectArea(value) {
-        setLoadingAfterFilter({...loadingAfterFilter, area: value});
-    }
-
-    function selectLocality(value) {
-        setLoadingAfterFilter({...loadingAfterFilter, locality: value});
-    }
-
-    function selectStreet(value) {
-        setLoadingAfterFilter({...loadingAfterFilter, street: value});
-    }
-
-    function selectBelonging(value) {
-        setLoadingAfterFilter({...loadingAfterFilter, belonging: value});
-    }
-
-    function selectServiceable(value) {
-        setLoadingAfterFilter({...loadingAfterFilter, serviceable: value});
+    function selectValueForFilter(value, field) {
+        setLoadingAfterFilter({...loadingAfterFilter, [field]: value});
     }
 
     return (
         <div>
             <form onSubmit={onSubmit}>
                 <div className="inputFilter">
-                    <p>Район</p>
-                    <select defaultValue={loadingAfterFilter.area} name="select"
-                            onChange={event => selectArea(event.target.value)
+                    <p className="titleInputFilter">Район:</p>
+                    <select className="form-control" defaultValue={loadingAfterFilter.area} name="select"
+                            onChange={event => selectValueForFilter(event.target.value, 'area')
                             }>
                         <option value="">Не выбран</option>
                         {gomelskaya.map((area) =>
@@ -84,31 +68,44 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setLi
                     </select>
                 </div>
                 <div className="inputFilter">
-                    <p>Населенный пункт</p>
-                    <input value={loadingAfterFilter.locality} onChange={event => selectLocality(event.target.value)}/>
+                    <p className="titleInputFilter">Населенный пункт:</p>
+                    <input className="form-control" value={loadingAfterFilter.locality}
+                           onChange={event => selectValueForFilter(event.target.value, 'locality')}/>
                 </div>
                 <div className="inputFilter">
-                    <p>Улица</p>
-                    <input value={loadingAfterFilter.street} onChange={event => selectStreet(event.target.value)}/>
+                    <p className="titleInputFilter">Улица:</p>
+                    <input className="form-control" value={loadingAfterFilter.street}
+                           onChange={event => selectValueForFilter(event.target.value, 'street')}/>
                 </div>
                 <div className="inputFilter">
-                    <p>Принадлежность</p>
-                    <input value={loadingAfterFilter.belonging}
-                           onChange={event => selectBelonging(event.target.value)}/>
+                    <p className="titleInputFilter">Принадлежность:</p>
+                    <input className="form-control" value={loadingAfterFilter.belonging}
+                           onChange={event => selectValueForFilter(event.target.value, 'belonging')}/>
                 </div>
                 <div className="inputFilter">
-                    <p>Исправность</p>
-                    <select defaultValue={loadingAfterFilter.serviceable} name="select"
-                            onChange={event => selectServiceable(event.target.value)}>
+                    <p className="titleInputFilter">Исправность:</p>
+                    <select className="form-control" defaultValue={loadingAfterFilter.serviceable} name="select"
+                            onChange={event => selectValueForFilter(event.target.value, 'serviceable')}>
                         <option value="">Все</option>
                         <option value="true">Исправные</option>
                         <option value="false">Неисправные</option>
                     </select>
                 </div>
-                <br/>
-                <br/>
-                <input type="submit" value="Получит excel отчет"/>
-                <input type="submit" value="Загрузить на страницу"/>
+
+
+
+                <div className="btn-group filterBtn" role="group" aria-label="Button group with nested dropdown">
+                    <div className="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" className="btn btn-primary dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            Фильтровать
+                        </button>
+                        <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <li><input className="dropdown-item"  type="submit" value="Получит excel отчет"/></li>
+                            <li><input className="dropdown-item"  type="submit" value="Загрузить на страницу"/></li>
+                        </ul>
+                    </div>
+                </div>
             </form>
         </div>
     );

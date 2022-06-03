@@ -21,7 +21,7 @@ const Pagination = ({paginationPage, changePage, pages}) => {
         }
     }
 
-    return <nav aria-label="Page navigation example">
+    return <nav className="paginationCustom">
         <ul className="pagination">
             <li className="page-item"><a onClick={() => previousPage()}
                                          className={(paginationPage === 0) ? 'page-link btn disabled' : 'page-link'}

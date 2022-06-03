@@ -7,7 +7,7 @@ const MySelect = ({setSelectPagination, setPaginationPage, options}) => {
     }
 
     return (
-        <select defaultValue="" onChange={event => changePaginationAmount(event.target.value)} className="form-select"
+        <select className="form-control selectAmountPages" defaultValue="" onChange={event => changePaginationAmount(event.target.value)}
                 aria-label="Default select example">
             <option disabled value="">Кол-во записей</option>
             {options.map(option =>

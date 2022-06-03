@@ -22,7 +22,7 @@ body {
 }
 
 .sortCursor:hover {
-    background: rgba(0, 183, 255, 0.322);
+    background: #e3f2fd;
     cursor: pointer;
 }
 
@@ -48,4 +48,49 @@ body {
 
 .inputFilter {
     float: left;
+    margin-left: 10px;
 }
+
+.titleInputFilter {
+    margin-bottom: 0;
+    font-size: 90%;
+    font-weight: bold;
+}
+
+.filterBtn {
+    margin-top: 24px;
+    margin-left: 10px;
+}
+
+.mainBlockListHydrants {
+    margin: 5px;
+}
+
+.selectAmountPages {
+    width: 200px;
+}
+
+.paginationCustom {
+    margin-left: auto;
+    margin-right: auto;
+    width: 45%;
+}
+
+.search{
+    width: 50%;
+    float: right;
+}
+
+.tableParams{
+    margin-top: 30px;
+}
+
+.navBtn{
+    margin-left: 5px;
+}
+
+.notFound{
+    text-align: center;
+    margin-top: 50px;
+}
+
