@@ -49,9 +49,33 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setLi
         })();
     }
 
+    function download_exel_report() {
+        setLoading(true);
+        axios({
+            url: 'http://localhost:8000/api/download/',
+            method: 'GET',
+            params: {
+                    area: loadingAfterFilter.area,
+                    locality: loadingAfterFilter.locality,
+                    street: loadingAfterFilter.street,
+                    belonging: loadingAfterFilter.belonging,
+                    serviceable: loadingAfterFilter.serviceable,
+                },
+            responseType: 'blob', // important
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'report.xlsx'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+            setLoading(false);
+        });
+    }
+
     function selectValueForFilter(value, field) {
         setLoadingAfterFilter({...loadingAfterFilter, [field]: value});
-    }
+    };
 
     return (
         <div>
@@ -93,7 +117,6 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setLi
                 </div>
 
 
-
                 <div className="btn-group filterBtn" role="group" aria-label="Button group with nested dropdown">
                     <div className="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" className="btn btn-primary dropdown-toggle"
@@ -101,8 +124,8 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setLi
                             Фильтровать
                         </button>
                         <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <li><input className="dropdown-item"  type="submit" value="Получит excel отчет"/></li>
-                            <li><input className="dropdown-item"  type="submit" value="Загрузить на страницу"/></li>
+                            <li className="dropdown-item filterBtnItem" onClick={()=>{download_exel_report()}}>Получит excel отчет</li>
+                            <li><input className="dropdown-item filterBtnItem" type="submit" value="Загрузить на страницу"/></li>
                         </ul>
                     </div>
                 </div>

@@ -1,7 +1,8 @@
 import React from "react";
+import {Link, NavLink} from 'react-router-dom';
 import {useState, useEffect, useMemo} from "react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import sleep from "../utils/sleep";
 import Pagination from "./UI/Pagination";
 import MySelect from "./UI/MySelect";
 import {sortHydrants} from "../utils/sortHydrants";
@@ -10,10 +11,19 @@ import MyInput from "./UI/MyInput";
 import Loader from "./UI/Loader/Loader";
 
 const ListHydrants = () => {
-    const [listHydrants, setListHydrants] = useState([]);
+
     const [loading, setLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [listHydrants, setListHydrants] = useState([]);
     const [paginationPage, setPaginationPage] = useState(0);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery2, setSearchQuery2] = useState("");
+    const [loadingAfterFilter, setLoadingAfterFilter] = useState({
+        area: "",
+        locality: "",
+        street: "",
+        belonging: "",
+        serviceable: ""
+    });
     const [selectPagination, setSelectPagination] = useState(10);
     const [sortType, setSortType] = useState({
         id: "none",
@@ -22,13 +32,11 @@ const ListHydrants = () => {
         belonging: "none",
         characteristics: "none",
     });
-    const [loadingAfterFilter, setLoadingAfterFilter] = useState({
-        area: "",
-        locality: "",
-        street: "",
-        belonging: "",
-        serviceable: ""
-    });
+
+    function ff(value) {
+        setSearchQuery(value);
+
+    }
 
     const filterHydrants = useMemo(() => {
         const result = listHydrants.filter((hydrant) => {
@@ -91,11 +99,19 @@ const ListHydrants = () => {
 
     useEffect(() => {
         (async () => {
-            const response = await axios.get("hydrants/");
+            const config = {
+                params: {
+                    area: loadingAfterFilter.area,
+                    locality: loadingAfterFilter.locality,
+                    street: loadingAfterFilter.street,
+                    belonging: loadingAfterFilter.belonging,
+                    serviceable: loadingAfterFilter.serviceable,
+                }
+            }
+            const response = await axios.get("hydrants/", config);
             if (response.status === 200) {
                 setListHydrants(response.data);
             }
-            //   sleep(1000);
             setLoading(false);
         })();
     }, []);
@@ -239,7 +255,15 @@ const ListHydrants = () => {
                                         <p>Диаметр: {hydrant.diameter_drain}</p>
                                         {hydrant.description && <p>Описание: {hydrant.note}</p>}
                                     </td>
-                                    <td>Редактировать</td>
+                                    <td><Link className="nav-link"
+                                              to="/hydrants_on_the_map/slug"
+                                              state={{
+                                                  from: {
+                                                      width: hydrant.coordinate_width,
+                                                      height: hydrant.coordinate_height
+                                                  },
+                                              }}>Показать на крте</Link>
+                                    </td>
                                 </tr>
                             ))}
                             </tbody>
@@ -251,7 +275,7 @@ const ListHydrants = () => {
                                 changePage={setPaginationPage}
                             />
                         </div>
-                        <h3 className="notFound" style={!filterHydrants.length < 0 ? {display: "none"} : {
+                        <h3 className="notFound" style={!filterHydrants.length <= 0 ? {display: "none"} : {
                             clear: "both",
                             marginTop: "100px"
                         }}>Ничего не найдено.</h3>

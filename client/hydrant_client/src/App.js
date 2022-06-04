@@ -3,8 +3,12 @@ import {BrowserRouter, Routes, Route, Redirect} from 'react-router-dom';
 import Navbar from "./components/layout/Navbar";
 import ListHydrants from "./components/ListHydrants";
 import AddHydrant from "./components/AddHydrant";
+import HydrantsOnTheMap from "./components/HydrantsOnTheMap";
+import {useState} from "react";
+
 
 function App() {
+
     return (
         <div className="App">
             <BrowserRouter>
@@ -12,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path='/list_hydrants' element={<ListHydrants/>}/>
                     <Route path='/add_hydrant' element={<AddHydrant/>}/>
+                    <Route path='/hydrants_on_the_map/:type' element={<HydrantsOnTheMap/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
