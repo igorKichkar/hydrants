@@ -62,7 +62,7 @@ body {
     margin-left: 10px;
 }
 
-:hover.filterBtnItem{
+:hover.filterBtnItem {
     cursor: pointer;
     background-color: #e3f2fd;
 }
@@ -81,26 +81,36 @@ body {
     width: 45%;
 }
 
-.search{
+.search {
     width: 50%;
     float: right;
 }
 
-.tableParams{
+.tableParams {
     margin-top: 30px;
 }
 
-.navBtn{
+.navBtn {
     margin-left: 5px;
 }
 
-.notFound{
+.notFound {
     text-align: center;
     margin-top: 50px;
 }
 
 .leaflet-container {
-  width: 100%;
-  height: 90vh;
+    width: 100%;
+    height: 90vh;
+}
+
+.serviceable {
+    color: green;
+    font-weight: bold;
+}
+
+.noServiceable {
+    color: #ad0000;
+    font-weight: bold;
 }
 

@@ -23,7 +23,7 @@ const gomelskaya = [
     // {title: "Чечерский", value: "CHecherskij"},
 ]
 
-const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setListHydrants, setLoading}) => {
+const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, setListHydrants, setLoading}) => {
     function onSubmit(e) {
         e.preventDefault();
         updateHydrants();
@@ -55,12 +55,12 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setLi
             url: 'http://localhost:8000/api/download/',
             method: 'GET',
             params: {
-                    area: loadingAfterFilter.area,
-                    locality: loadingAfterFilter.locality,
-                    street: loadingAfterFilter.street,
-                    belonging: loadingAfterFilter.belonging,
-                    serviceable: loadingAfterFilter.serviceable,
-                },
+                area: loadingAfterFilter.area,
+                locality: loadingAfterFilter.locality,
+                street: loadingAfterFilter.street,
+                belonging: loadingAfterFilter.belonging,
+                serviceable: loadingAfterFilter.serviceable,
+            },
             responseType: 'blob', // important
         }).then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -124,8 +124,12 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, listHydrants, setLi
                             Фильтровать
                         </button>
                         <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <li className="dropdown-item filterBtnItem" onClick={()=>{download_exel_report()}}>Получит excel отчет</li>
-                            <li><input className="dropdown-item filterBtnItem" type="submit" value="Загрузить на страницу"/></li>
+                            <li className="dropdown-item filterBtnItem"
+                                onClick={() => {download_exel_report()}}>
+                                Получить excel отчет
+                            </li>
+                            <li><input className="dropdown-item filterBtnItem" type="submit"
+                                       value="Загрузить на страницу"/></li>
                         </ul>
                     </div>
                 </div>

@@ -1,74 +1,29 @@
 import React from "react";
-import {Link, NavLink} from 'react-router-dom';
-import {useState, useEffect, useMemo} from "react";
-import {useNavigate} from "react-router-dom";
-import axios from "axios";
 import Pagination from "./UI/Pagination";
 import MySelect from "./UI/MySelect";
 import {sortHydrants} from "../utils/sortHydrants";
 import SortButton from "./UI/SortButton";
 import MyInput from "./UI/MyInput";
 import Loader from "./UI/Loader/Loader";
+import DoubleButton from "./UI/DoubleButton";
 
-const ListHydrants = () => {
-
-    const [loading, setLoading] = useState(true);
-    const [listHydrants, setListHydrants] = useState([]);
-    const [paginationPage, setPaginationPage] = useState(0);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchQuery2, setSearchQuery2] = useState("");
-    const [loadingAfterFilter, setLoadingAfterFilter] = useState({
-        area: "",
-        locality: "",
-        street: "",
-        belonging: "",
-        serviceable: ""
-    });
-    const [selectPagination, setSelectPagination] = useState(10);
-    const [sortType, setSortType] = useState({
-        id: "none",
-        type: "none",
-        address: "none",
-        belonging: "none",
-        characteristics: "none",
-    });
-
-    function ff(value) {
-        setSearchQuery(value);
-
-    }
-
-    const filterHydrants = useMemo(() => {
-        const result = listHydrants.filter((hydrant) => {
-            const all_field =
-                String(hydrant.type) +
-                hydrant.address_region +
-                hydrant.address_district +
-                hydrant.address_village_council +
-                hydrant.address_town +
-                hydrant.address_detail +
-                hydrant.belonging +
-                hydrant.number_in_map;
-            // если поисковой запрос не пустой, то запрос разбивается на массив отдельных слов
-            // и производится поиск каждого стова отдельно во всех нужных полях,
-            // поля объеденены в переменной all_field
-            if (searchQuery) {
-                const searchWords = searchQuery.split(" ");
-                for (let i = 0; i < searchWords.length; i++) {
-                    if (
-                        searchWords[i] &&
-                        !all_field.toLowerCase().includes(searchWords[i].toLowerCase())
-                    ) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        });
-        // при вводе в поле поиска сбрасывается пагинация на первую страницу
-        setPaginationPage(0);
-        return result;
-    }, [listHydrants, searchQuery]);
+const ListHydrants = ({
+                          listHydrants,
+                          setListHydrants,
+                          loading,
+                          setLoading,
+                          loadingAfterFilter,
+                          setLoadingAfterFilter,
+                          filterHydrants,
+                          searchQuery,
+                          setSearchQuery,
+                          paginationPage,
+                          setPaginationPage,
+                          selectPagination,
+                          setSelectPagination,
+                          sortType,
+                          setSortType,
+                      }) => {
 
     function pagination(page) {
         // данная функция отбирает порцию записей для конкретной страницы пагинации
@@ -97,32 +52,15 @@ const ListHydrants = () => {
         return paginationList;
     }
 
-    useEffect(() => {
-        (async () => {
-            const config = {
-                params: {
-                    area: loadingAfterFilter.area,
-                    locality: loadingAfterFilter.locality,
-                    street: loadingAfterFilter.street,
-                    belonging: loadingAfterFilter.belonging,
-                    serviceable: loadingAfterFilter.serviceable,
-                }
-            }
-            const response = await axios.get("hydrants/", config);
-            if (response.status === 200) {
-                setListHydrants(response.data);
-            }
-            setLoading(false);
-        })();
-    }, []);
-
     return (
         <div className="mainBlockListHydrants">
             {loading ? (
                 <Loader/>
             ) : (<>
-                    <MyInput loadingAfterFilter={loadingAfterFilter} setLoadingAfterFilter={setLoadingAfterFilter}
-                             listHydrants={listHydrants} setListHydrants={setListHydrants} setLoading={setLoading}/>
+                    <MyInput loadingAfterFilter={loadingAfterFilter}
+                             setLoadingAfterFilter={setLoadingAfterFilter}
+                             setListHydrants={setListHydrants}
+                             setLoading={setLoading}/>
                     {listHydrants.length > 0 ? (<>
                         <div className="tableParams">
                             <input
@@ -249,20 +187,28 @@ const ListHydrants = () => {
                                     </td>
                                     <td>{hydrant.belonging}</td>
                                     <td>
-                                        <p>Испраность: {hydrant.serviceable ? "Да" : "Нет"}</p>
+                                        <p>{hydrant.serviceable ? (<span className="serviceable">Исправен</span>) : (
+                                            <span className="noServiceable">Неисправен</span>)}</p>
                                         <p>Номер: {hydrant.number_in_map}</p>
                                         <p>Тип сети: {hydrant.type_of_water_supply}</p>
                                         <p>Диаметр: {hydrant.diameter_drain}</p>
-                                        {hydrant.description && <p>Описание: {hydrant.note}</p>}
+                                        {hydrant.description && (<p>Описание: {hydrant.description}</p>)}
                                     </td>
-                                    <td><Link className="nav-link"
-                                              to="/hydrants_on_the_map/slug"
-                                              state={{
-                                                  from: {
-                                                      width: hydrant.coordinate_width,
-                                                      height: hydrant.coordinate_height
-                                                  },
-                                              }}>Показать на крте</Link>
+                                    <td>
+                                        <DoubleButton path1={`/hydrants_on_the_map/${hydrant.number_in_map}`}
+                                                      path2={`/add_hydrant/${hydrant.id}`}
+                                                      state1={{
+                                                          from: {
+                                                              width: hydrant.coordinate_width,
+                                                              height: hydrant.coordinate_height
+                                                          },
+                                                      }}
+                                                      state2={{
+                                                          id: hydrant.id
+                                                      }}
+                                                      titleLink1={"Показать на крте"}
+                                                      titleLink2={"Редактировать"}
+                                        />
                                     </td>
                                 </tr>
                             ))}
@@ -279,7 +225,6 @@ const ListHydrants = () => {
                             clear: "both",
                             marginTop: "100px"
                         }}>Ничего не найдено.</h3>
-
                     </>) : <h3 className="notFound">Ничего не найдено.</h3>}
                 </>
             )}
