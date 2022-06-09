@@ -1,11 +1,12 @@
 import React from 'react';
 
-const InputForAddHydrant = ({handler, value, title}) => {
+const InputForAddHydrant = ({handler, field, value, title, style}) => {
     return (
-        <div className="inputFilter">
+        <div className="inputFilter" style={style}>
             <p className="titleInputFilter">{title}:</p>
-            <input className="form-control" value={value}
-                   onChange={event => console.log(event.target.value)}/>
+            <input className="form-control" value={value ?? ""}
+                    onChange={event => handler(field, event.target.value)}
+            />
         </div>
     );
 };
