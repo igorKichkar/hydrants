@@ -196,7 +196,7 @@ const ListHydrants = ({
                                     </td>
                                     <td>
                                         <DoubleButton path1={`/hydrants_on_the_map/${hydrant.number_in_map}`}
-                                                      path2={`/add_hydrant/${hydrant.id}`}
+                                                      path2={`/update_hydrant/${hydrant.id}`}
                                                       state1={{
                                                           from: {
                                                               width: hydrant.coordinate_width,

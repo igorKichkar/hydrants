@@ -75,7 +75,7 @@ const MyInput = ({loadingAfterFilter, setLoadingAfterFilter, setListHydrants, se
 
     function selectValueForFilter(value, field) {
         setLoadingAfterFilter({...loadingAfterFilter, [field]: value});
-    };
+    }
 
     return (
         <div>

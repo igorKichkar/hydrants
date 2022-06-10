@@ -1,22 +1,28 @@
 import React, {useState} from 'react';
+import {useLocation} from "react-router-dom";
+import {useEffect} from "react";
 import axios from "axios";
 import InputForAddHydrant from "./UI/InputForAddHydrant";
 import TextAreaForAddHydrant from "./UI/TextAreaForAddHydrant";
 import Loader from "./UI/Loader/Loader";
 
-const AddHydrant = ({loading, setLoading, loadHydrants}) => {
+const UpdateHydrant = ({loading, setLoading, loadHydrants}) => {
+    const location = useLocation();
+    const {id} = location.state;
     const [hydrant, setHydrant] = useState({});
 
     function loadHydrant() {
         (async () => {
             setLoading(true);
-            const response = await axios.get('hydrants/');
+            const response = await axios.get(`hydrants/${id}/`);
             if (response.status === 200) {
                 setHydrant(response.data);
             }
             setLoading(false);
         })()
     }
+
+    useEffect(loadHydrant, []);
 
     function changeValue(field, value) {
         setHydrant({...hydrant, [field]: value});
@@ -51,7 +57,7 @@ const AddHydrant = ({loading, setLoading, loadHydrants}) => {
                 type_of_water_supply: hydrant.type_of_water_supply,
                 serial_number: hydrant.serial_number
             }
-            const response = await axios.post('hydrants/', params);
+            const response = await axios.put(`hydrants/${id}/`, params);
             if (response.status === 200) {
                 loadHydrant();
                 loadHydrants();
@@ -64,8 +70,7 @@ const AddHydrant = ({loading, setLoading, loadHydrants}) => {
         e.preventDefault();
         updateHydrant();
     }
-
-    console.log(hydrant.serviceable)
+console.log(hydrant.serviceable)
     return (
         <div>
             {loading ?
@@ -74,7 +79,7 @@ const AddHydrant = ({loading, setLoading, loadHydrants}) => {
                     <form onSubmit={onSubmit}>
                         <div className="inputFilter" style={{width: '20%'}}>
                             <p className="titleInputFilter">Тип:</p>
-                            <select className="form-control" defaultValue="Пожарный гидрант" name="select"
+                            <select className="form-control" defaultValue="hydrant" name="select"
                                     onChange={event => changeValue("type", event.target.value)}>
                                 <option value="Пожарный гидрант">Пожарный гидрант</option>
                             </select>
@@ -105,7 +110,7 @@ const AddHydrant = ({loading, setLoading, loadHydrants}) => {
                             <p className="titleInputFilter">Исправность:</p>
                             <select className="form-control" defaultValue={hydrant.serviceable ? "true" : "false"}
                                     name="select"
-                                    onChange={event => changeValue('serviceable', event.target.value === "true")}>
+                                    onChange={event => changeValue('serviceable', event.target.value==="true")}>
                                 <option value="true">Исправен</option>
                                 <option value="false">Неисправен</option>
                             </select>
@@ -150,4 +155,4 @@ const AddHydrant = ({loading, setLoading, loadHydrants}) => {
     );
 };
 
-export default AddHydrant;
+export default UpdateHydrant;

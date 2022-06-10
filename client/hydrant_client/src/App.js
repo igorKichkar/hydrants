@@ -4,6 +4,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import axios from "axios";
 import Navbar from "./components/layout/Navbar";
 import ListHydrants from "./components/ListHydrants";
+import UpdateHydrant from "./components/UpdateHydrant";
 import AddHydrant from "./components/AddHydrant";
 import HydrantsOnTheMap from "./components/HydrantsOnTheMap";
 
@@ -28,7 +29,7 @@ function App() {
         characteristics: "none",
     });
 
-    useEffect(() => {
+    function loadHydrants() {
         (async () => {
             const config = {
                 params: {
@@ -45,7 +46,9 @@ function App() {
             }
             setLoading(false);
         })();
-    }, []);
+    }
+
+    useEffect(loadHydrants, []);
 
     const filterHydrants = useMemo(() => {
         const result = listHydrants.filter((hydrant) => {
@@ -102,8 +105,12 @@ function App() {
                         setSortType={setSortType}
 
                     />}/>
-                    <Route path='/add_hydrant/:type' element={<AddHydrant/>}/>
+                    <Route path='/update_hydrant/:type'
+                           element={<UpdateHydrant loading={loading} setLoading={setLoading}
+                                                   loadHydrants={loadHydrants}/>}/>
                     <Route path='/hydrants_on_the_map/:type' element={<HydrantsOnTheMap/>}/>
+                    <Route path='/add_hydrant' element={<AddHydrant loading={loading} setLoading={setLoading}
+                                                                    loadHydrants={loadHydrants}/>}/>
                 </Routes>
             </BrowserRouter>
         </div>

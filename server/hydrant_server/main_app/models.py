@@ -8,7 +8,7 @@ class Profile(AbstractUser):
 
 
 class Hydrant(models.Model):
-    serial_number = models.CharField(max_length=20)
+    serial_number = models.CharField(max_length=20, blank=True)
     number_in_map = models.CharField(max_length=20, blank=True)
     type = models.CharField(max_length=50)
     address_region = models.CharField(max_length=30)
