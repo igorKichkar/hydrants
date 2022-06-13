@@ -1,0 +1,27 @@
+version: "3.8"
+   
+services:
+  web:
+    build:
+      context: ./server/
+      
+    command: python server/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+  app:
+    restart: always
+    command : npm start
+    container_name: app-dev
+    image: app-dev
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/client/app/src
+    ports:
+      - 3000:3000
+    stdin_open: true
+    depends_on:
+      - web

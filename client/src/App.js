@@ -103,7 +103,6 @@ function App() {
                         setSelectPagination={setSelectPagination}
                         sortType={sortType}
                         setSortType={setSortType}
-
                     />}/>
                     <Route path='/update_hydrant/:type'
                            element={<UpdateHydrant loading={loading} setLoading={setLoading}

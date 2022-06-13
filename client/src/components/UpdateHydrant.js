@@ -5,8 +5,10 @@ import axios from "axios";
 import InputForAddHydrant from "./UI/InputForAddHydrant";
 import TextAreaForAddHydrant from "./UI/TextAreaForAddHydrant";
 import Loader from "./UI/Loader/Loader";
+import {useNavigate} from "react-router-dom";
 
 const UpdateHydrant = ({loading, setLoading, loadHydrants}) => {
+    const navigate = useNavigate();
     const location = useLocation();
     const {id} = location.state;
     const [hydrant, setHydrant] = useState({});
@@ -66,11 +68,24 @@ const UpdateHydrant = ({loading, setLoading, loadHydrants}) => {
         })();
     }
 
+    function deleteHydrant() {
+        setLoading(true);
+        (async () => {
+            const response = await axios.delete(`hydrants/${id}/`);
+            if (response.status === 204) {
+                loadHydrants();
+            }
+            setLoading(false);
+            navigate('/list_hydrants');
+        })();
+    }
+
     function onSubmit(e) {
         e.preventDefault();
         updateHydrant();
     }
-console.log(hydrant.serviceable)
+
+    console.log(hydrant.serviceable)
     return (
         <div>
             {loading ?
@@ -84,7 +99,8 @@ console.log(hydrant.serviceable)
                                 <option value="Пожарный гидрант">Пожарный гидрант</option>
                             </select>
                         </div>
-                        <InputForAddHydrant field={'number_in_map'} handler={changeValue} value={hydrant.number_in_map}
+                        <InputForAddHydrant required={true} field={'number_in_map'} handler={changeValue}
+                                            value={hydrant.number_in_map}
                                             title={'Номер'} style={{width: '20%'}}/>
                         <div className="inputFilter" style={{clear: 'both', width: '20%'}}>
                             <p className="titleInputFilter">Район:</p>
@@ -96,43 +112,46 @@ console.log(hydrant.serviceable)
                         <InputForAddHydrant field={'address_village_council'} handler={changeValue}
                                             value={hydrant.address_village_council}
                                             title={'Сельский совет'} style={{width: '20%'}}/>
-                        <InputForAddHydrant field={'address_town'}
+                        <InputForAddHydrant required={true} field={'address_town'}
                                             handler={changeValue}
                                             value={hydrant.address_town}
                                             title={'Населенный пункт'} style={{width: '20%'}}/>
-                        <TextAreaForAddHydrant field={'address_detail'} handler={changeValue}
+                        <TextAreaForAddHydrant required={true} field={'address_detail'} handler={changeValue}
                                                value={hydrant.address_detail}
                                                title={'Подробный адрес, принадлежность к подразделению'}
                                                style={{width: '35%'}}/>
-                        <InputForAddHydrant field={'belonging'} handler={changeValue} value={hydrant.belonging}
+                        <InputForAddHydrant required={true} field={'belonging'} handler={changeValue}
+                                            value={hydrant.belonging}
                                             title={'Принадлежность'} style={{width: '20%'}}/>
                         <div className="inputFilter" style={{width: '20%'}}>
                             <p className="titleInputFilter">Исправность:</p>
                             <select className="form-control" defaultValue={hydrant.serviceable ? "true" : "false"}
                                     name="select"
-                                    onChange={event => changeValue('serviceable', event.target.value==="true")}>
+                                    onChange={event => changeValue('serviceable', event.target.value === "true")}>
                                 <option value="true">Исправен</option>
                                 <option value="false">Неисправен</option>
                             </select>
                         </div>
-                        <TextAreaForAddHydrant field={'fault_type'} handler={changeValue} value={hydrant.fault_type}
+                        <TextAreaForAddHydrant field={'fault_type'} handler={changeValue}
+                                               value={hydrant.fault_type}
                                                title={'Описание неисправности'} style={{width: '20%'}}/>
-                        <InputForAddHydrant field={'coordinate_width'} handler={changeValue}
+                        <InputForAddHydrant required={true} field={'coordinate_width'} handler={changeValue}
                                             value={hydrant.coordinate_width}
                                             title={'Координаты ширина'} style={{clear: 'both', width: '20%'}}/>
-                        <InputForAddHydrant field={'coordinate_height'} handler={changeValue}
+                        <InputForAddHydrant required={true} field={'coordinate_height'} handler={changeValue}
                                             value={hydrant.coordinate_height}
                                             title={'Координаты долгота'} style={{width: '20%'}}/>
-                        <InputForAddHydrant field={'date_last_check'} handler={changeValue}
+                        <InputForAddHydrant required={true} field={'date_last_check'} handler={changeValue}
                                             value={hydrant.date_last_check}
                                             title={'Дата последней проверки'} style={{width: '20%'}}/>
-                        <InputForAddHydrant field={'type_of_water_supply'} handler={changeValue}
+                        <InputForAddHydrant required={true} field={'type_of_water_supply'} handler={changeValue}
                                             value={hydrant.type_of_water_supply} title={'Тип водоснабжения'}
                                             style={{clear: 'both', width: '20%'}}/>
-                        <InputForAddHydrant field={'diameter_drain'} handler={changeValue}
+                        <InputForAddHydrant required={true} field={'diameter_drain'} handler={changeValue}
                                             value={hydrant.diameter_drain}
                                             title={'Диаметр трубопровода'} style={{width: '20%'}}/>
-                        <InputForAddHydrant field={'place_plate'} handler={changeValue} value={hydrant.place_plate}
+                        <InputForAddHydrant required={true} field={'place_plate'} handler={changeValue}
+                                            value={hydrant.place_plate}
                                             title={'Расположение таблички'} style={{clear: 'both', width: '20%'}}/>
                         <InputForAddHydrant field={'distance_front'} handler={changeValue}
                                             value={hydrant.distance_front}
@@ -145,11 +164,16 @@ console.log(hydrant.serviceable)
                         <TextAreaForAddHydrant field={'note'} handler={changeValue} value={hydrant.note}
                                                title={'Примечание'}
                                                style={{width: '41%'}}/>
-
                         <div className="inputFilter" style={{clear: 'both'}}>
                             <input className="btn btn-primary" style={{marginTop: "10px"}} type="submit"
                                    value="Сохранить"/>
                         </div>
+                        <div className="inputFilter">
+                            <button onClick={() => deleteHydrant()} className="btn btn-danger"
+                                    style={{marginTop: "10px"}}>Удалить
+                            </button>
+                        </div>
+
                     </form>)}
         </div>
     );
